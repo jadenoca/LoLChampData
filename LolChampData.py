@@ -122,17 +122,12 @@ with open('champion_stats.txt') as champion_stats_txt:
         return {"W": ["Win rate (%)", role_list.get_role_wr()], "R":["Role rate (%)", role_list.get_role_rr()], 
     "P": ["Pick rate (%)", role_list.get_role_pr()], "B":["Ban rate (%)", role_list.get_role_br() ], "K": ["KDA", role_list.get_role_kda()], "PR": ["Presence (%)", role_list.get_role_pres()]}    
 
-    def get_variable():
-        correct = ["W", "R", "P", "B", "K", "PR"]
-        i = 0
-        while True:
-            if i > 0:
-                print("\nInvalid value. Please try again.")
-            userstat = input("\nEnter one of the following as a Variable (Not case-sensitive):\n'W' for Win rate\n'R' for Role rate\n'P' for Pick rate\n'B' for Ban rate\n'K' for KDA\n'PR' for Presence\n").upper()
-            i += 1
-            if userstat in correct:
+    def get_variable(list_correct, user_input):    
+        while True:           
+            if user_input in list_correct:
                 break
-        return userstat
+            user_input = input("Invalid entry. Try again.\n")
+        return user_input
 
 
     print("\nWelcome to the League of Legends Champion Stat Project!")
@@ -157,19 +152,21 @@ Enter '0' to keep all values:\n""")))
     printAllChampStats(adcs.champions_in_role)
     print("SUPPORTS:\n")
     printAllChampStats(supports.champions_in_role)
+
     input_dict = {"T": top_laners, "J": junglers, "M": mid_laners, "A": adcs, "S": supports}
-    while True:
-        role_selection = input("What role would you like to compare stats for?\nT for Top\nJ for Jungle\nM for Mid\nA for ADC\nS for Support\n").upper()
-        if(role_selection in input_dict):
-            break
-        print("Invalid entry. Try again.")
+    list_rol = ["T", "J", "M", "A", "S"]
+    list_var= ["W", "R", "P", "B", "K", "PR"]
+
+    role_selection = get_variable(list_rol, input("What role would you like to compare stats for?\nT for Top\nJ for Jungle\nM for Mid\nA for ADC\nS for Support\n").upper())
 
     role_to_graph = create_dict(input_dict[role_selection])
 
     print("\n\n\nPlease select an Independent Variable")
-    varx = get_variable()
+    
+    varx = get_variable(list_var, input("\nEnter one of the following as an Independent Variable (Not case-sensitive):\n'W' for Win rate\n'R' for Role rate\n'P' for Pick rate\n'B' for Ban rate\n'K' for KDA\n'PR' for Presence\n").upper())
 
     print("\n\nGreat, now for the Dependent Variable")
-    vary = get_variable()
+    
+    vary = get_variable(list_var, input("\nEnter one of the following as a Dependent Variable (Not case-sensitive):\n'W' for Win rate\n'R' for Role rate\n'P' for Pick rate\n'B' for Ban rate\n'K' for KDA\n'PR' for Presence\n").upper())
 
     draw_graph(role_to_graph[varx][1], role_to_graph[vary][1], role_to_graph[varx][0], role_to_graph[vary][0])
