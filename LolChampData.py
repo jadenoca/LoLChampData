@@ -13,46 +13,18 @@ class Champion():
         self.cbr = champ_br
         self.cpresence = round(champ_presence, 2)
         self.ckda = champ_kda
-    def get_name(self): 
-        return self.cname
-    def get_role(self):
-        return self.crole
-    def get_winrate(self):
-        return self.cwr
-    def get_rolerate(self):
-        return self.crr
-    def get_pickrate(self):
-        return self.cpr
-    def get_banrate(self):
-        return self.cbr
-    def get_presence(self):
-        return self.cpresence
-    def get_kda(self):
-        return self.ckda  
     def get_champion(self):
         return "{} {} {}% {}% {}% {}% {}% {}".format(self.cname, self.crole, self.cwr, self.crr, self.cpr, self.cbr, self.cpresence,self.ckda)
 class Role():
     def __init__(self, role_champs):
         self.champions_in_role = role_champs
-        self.role_wr = [rchamp.get_winrate() for rchamp in role_champs]
-        self.role_rr = [rchamp.get_rolerate() for rchamp in role_champs]
-        self.role_pr = [rchamp.get_pickrate() for rchamp in role_champs]
-        self.role_br = [rchamp.get_banrate() for rchamp in role_champs]
-        self.role_pres = [rchamp.get_presence() for rchamp in role_champs]
-        self.role_kda = [rchamp.get_kda() for rchamp in role_champs]   
-    def get_role_wr(self):
-        return self.role_wr
-    def get_role_rr(self):
-        return self.role_rr
-    def get_role_pr(self):
-        return self.role_pr
-    def get_role_br(self):
-        return self.role_br
-    def get_role_pres(self):
-        return self.role_pres
-    def get_role_kda(self):
-        return self.role_kda
-     
+        self.role_wr = [rchamp.cwr for rchamp in role_champs]
+        self.role_rr = [rchamp.crr for rchamp in role_champs]
+        self.role_pr = [rchamp.cpr for rchamp in role_champs]
+        self.role_br = [rchamp.cbr for rchamp in role_champs]
+        self.role_pres = [rchamp.cpresence for rchamp in role_champs]
+        self.role_kda = [rchamp.ckda for rchamp in role_champs]   
+  
 with open('champion_stats.txt') as champion_stats_txt:
 
     raw_champion_data = champion_stats_txt.readlines()
@@ -69,7 +41,8 @@ with open('champion_stats.txt') as champion_stats_txt:
     #Only the last 5 entres are needed when taking in statistics such as winrate and rolerate because we are 
     #Discarding the first 4 entries on the line (tier, letter grade) because they are very subjective
     def make_lists(thresh):
-    
+        if type(thresh) == str:
+            thresh = 0
         for i in range(0, len(raw_champion_data), 3):
             if float(raw_champion_data[i + 2].strip('\n').split()[-4][:-1]) > thresh: 
                 champs.append(raw_champion_data[i].strip('\n').split(',')[0].strip('\"'))
@@ -97,7 +70,7 @@ with open('champion_stats.txt') as champion_stats_txt:
     def compile_role(champ_list, desired_role) :
         champs_in_role = []
         for character in champ_list:
-            if character.get_role() == desired_role:
+            if character.crole == desired_role:
                 champs_in_role.append(character)
         return champs_in_role
 
@@ -119,8 +92,8 @@ with open('champion_stats.txt') as champion_stats_txt:
             plt.show()
 
     def create_dict(role_list):
-        return {"W": ["Win rate (%)", role_list.get_role_wr()], "R":["Role rate (%)", role_list.get_role_rr()], 
-    "P": ["Pick rate (%)", role_list.get_role_pr()], "B":["Ban rate (%)", role_list.get_role_br() ], "K": ["KDA", role_list.get_role_kda()], "PR": ["Presence (%)", role_list.get_role_pres()]}    
+        return {"W": ["Win rate (%)", role_list.role_wr], "R":["Role rate (%)", role_list.role_rr], 
+    "P": ["Pick rate (%)", role_list.role_pr], "B":["Ban rate (%)", role_list.role_br], "K": ["KDA", role_list.role_kda], "PR": ["Presence (%)", role_list.role_pres]}    
 
     def get_variable(list_correct, user_input):    
         while True:           
@@ -132,9 +105,9 @@ with open('champion_stats.txt') as champion_stats_txt:
 
     print("\nWelcome to the League of Legends Champion Stat Project!")
 
-    make_lists(float(input("""\nEnter lower threshold for pick rate in role to discard very rare picks in certain roles
+    make_lists(input("""\nEnter lower threshold for pick rate in role to discard very rare picks in certain roles
 (This will get rid of low playrate duplicates).
-Enter '0' to keep all values:\n""")))
+Enter '0' to keep all values. An invalid value will default to 0:\n"""))
     
     list_of_champions = create_champs()
     top_laners = Role(compile_role(list_of_champions, "TOP"))
