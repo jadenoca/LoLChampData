@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 
-
 class Champion():
     def __init__(self, champ_name = '', champ_role = '', champ_wr = 0.0, champ_rr = 0.0, champ_pr = 0.0, champ_br = 0.0, champ_presence = 0.0, champ_kda = 0.0):
         self.cname = champ_name
@@ -13,7 +12,7 @@ class Champion():
         self.cbr = champ_br
         self.cpresence = round(champ_presence, 2)
         self.ckda = champ_kda
-    def get_champion(self):
+    def champion_as_string(self):
         return "{} {} {}% {}% {}% {}% {}% {}".format(self.cname, self.crole, self.cwr, self.crr, self.cpr, self.cbr, self.cpresence,self.ckda)
 class Role():
     def __init__(self, role_champs):
@@ -57,7 +56,7 @@ with open('champion_stats.txt') as champion_stats_txt:
     def printAllChampStats(champ_list): 
         
         for cham in champ_list:
-            print(cham.get_champion())
+            print(cham.champion_as_string())
         print("\nFormatted as: Champion ROLE Win% Role% Pick% Ban% KDA\n\n")
     
     def create_champs():
@@ -74,12 +73,12 @@ with open('champion_stats.txt') as champion_stats_txt:
                 champs_in_role.append(character)
         return champs_in_role
 
-    def draw_graph(listx, listy, xname, yname):
+    def draw_graph(listx, listy, xname, yname, title):
             listx = np.array(listx)
             listy = np.array(listy)
             plt.xlabel(xname)
             plt.ylabel(yname)
-            plt.title(xname + " vs. " + yname + "\nin League of Legends")
+            plt.title("{} vs. {} for {} \nin League of Legends".format(xname, yname, title))
             xlist = listx.reshape(-1, 1)
             ylist = listy.reshape(-1, 1)
             plt.scatter(listx, listy, s = 1)
@@ -129,7 +128,7 @@ Enter '0' to keep all values. An invalid value will default to 0:\n"""))
     input_dict = {"T": top_laners, "J": junglers, "M": mid_laners, "A": adcs, "S": supports}
     list_rol = ["T", "J", "M", "A", "S"]
     list_var= ["W", "R", "P", "B", "K", "PR"]
-
+    dict_title = {"T": "Top Laners", "J": "Junglers", "M": "Mid Laners", "A": "ADCs", "S": "Supports"}
     role_selection = get_variable(list_rol, input("What role would you like to compare stats for?\nT for Top\nJ for Jungle\nM for Mid\nA for ADC\nS for Support\n").upper())
 
     role_to_graph = create_dict(input_dict[role_selection])
@@ -142,4 +141,4 @@ Enter '0' to keep all values. An invalid value will default to 0:\n"""))
     
     vary = get_variable(list_var, input("\nEnter one of the following as a Dependent Variable (Not case-sensitive):\n'W' for Win rate\n'R' for Role rate\n'P' for Pick rate\n'B' for Ban rate\n'K' for KDA\n'PR' for Presence\n").upper())
 
-    draw_graph(role_to_graph[varx][1], role_to_graph[vary][1], role_to_graph[varx][0], role_to_graph[vary][0])
+    draw_graph(role_to_graph[varx][1], role_to_graph[vary][1], role_to_graph[varx][0], role_to_graph[vary][0], dict_title[role_selection])
