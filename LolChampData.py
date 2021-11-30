@@ -128,7 +128,7 @@ with open('champion_stats.txt') as champion_stats_txt:
         while True:
             if i > 0:
                 print("\nInvalid value. Please try again.")
-            userstat = input("\nEnter one of the following as a Variable (Not case-sensitive):\n'W' for Win rate\n'R' for Role rate\n'P' for Pick rate\n'B' for Ban rate\n'K' for KDA\n'PR' for Presence").upper()
+            userstat = input("\nEnter one of the following as a Variable (Not case-sensitive):\n'W' for Win rate\n'R' for Role rate\n'P' for Pick rate\n'B' for Ban rate\n'K' for KDA\n'PR' for Presence\n").upper()
             i += 1
             if userstat in correct:
                 break
@@ -157,9 +157,13 @@ Enter '0' to keep all values:\n""")))
     printAllChampStats(adcs.champions_in_role)
     print("SUPPORTS:\n")
     printAllChampStats(supports.champions_in_role)
-
-    role_selection = input("What role would you like to compare stats for?\nT for Top\nJ for Jungle\nM for Mid\nA for ADC\nS for Support\n").upper()
     input_dict = {"T": top_laners, "J": junglers, "M": mid_laners, "A": adcs, "S": supports}
+    while True:
+        role_selection = input("What role would you like to compare stats for?\nT for Top\nJ for Jungle\nM for Mid\nA for ADC\nS for Support\n").upper()
+        if(role_selection in input_dict):
+            break
+        print("Invalid entry. Try again.")
+
     role_to_graph = create_dict(input_dict[role_selection])
 
     print("\n\n\nPlease select an Independent Variable")
