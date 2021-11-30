@@ -101,7 +101,6 @@ with open('champion_stats.txt') as champion_stats_txt:
             user_input = input("Invalid entry. Try again.\n")
         return user_input
 
-
     print("\nWelcome to the League of Legends Champion Stat Project!")
 
     make_lists(input("""\nEnter lower threshold for pick rate in role to discard very rare picks in certain roles
