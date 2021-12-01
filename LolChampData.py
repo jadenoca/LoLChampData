@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 
 class Champion():
-    def __init__(self, champ_name = '', champ_role = '', champ_wr = 0.0, champ_rr = 0.0, champ_pr = 0.0, champ_br = 0.0, champ_presence = 0.0, champ_kda = 0.0):
+    def __init__(self, champ_name, champ_role, champ_wr, champ_rr, champ_pr, champ_br, champ_presence, champ_kda):
         self.cname = champ_name
         self.crole = champ_role
         self.cwr = champ_wr
@@ -39,6 +39,11 @@ with open('champion_stats.txt') as champion_stats_txt:
     #This methods fills the lists of champion information by stripping the file of of \n and splitting by spaces
     #Only the last 5 entres are needed when taking in statistics such as winrate and rolerate because we are 
     #Discarding the first 4 entries on the line (tier, letter grade) because they are very subjective
+    #Winrate is the percentage of games that the champion in that role wins
+    #Rolerate is the percentage of games, given that the champion is pick, that the champion is played in that role
+    #Pickrate is the percentage of games that the champion is picked in draft
+    #Banrate is the percentage of games that the champion is banned in draft
+    #Presence is Pickrate + Banrate, representing the percentage of games that the champion is either picked or banned in draft; its draft presence
     def make_lists(thresh):
         if type(thresh) == str:
             thresh = 0
@@ -62,7 +67,7 @@ with open('champion_stats.txt') as champion_stats_txt:
     def create_champs():
         champions_list = []
         for i in range(len(champs)):
-            cham = Champion(champ_name=champs[i], champ_role=roles[i], champ_wr=float(winrate[i]), champ_rr=float(rolerate[i]), champ_pr=float(pickrate[i]), champ_br=float(banrate[i]), champ_presence=float(presence[i]), champ_kda=float(kda[i]))
+            cham = Champion(champs[i], roles[i], float(winrate[i]), float(rolerate[i]), float(pickrate[i]), float(banrate[i]), float(presence[i]), float(kda[i]))
             champions_list.append(cham)
         return champions_list
 
