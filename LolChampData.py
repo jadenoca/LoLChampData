@@ -67,12 +67,8 @@ with open('champion_stats.txt') as champion_stats_txt:
         return champions_list
 
     def compile_role(champ_list, desired_role) :
-        champs_in_role = []
-        for character in champ_list:
-            if character.crole == desired_role:
-                champs_in_role.append(character)
-        return champs_in_role
-
+        return list(filter(lambda character: character.crole == desired_role, champ_list))
+       
     def draw_graph(listx, listy, xname, yname, title):
             listx = np.array(listx)
             listy = np.array(listy)
@@ -125,8 +121,8 @@ Enter '0' to keep all values. An invalid value will default to 0:\n"""))
     printAllChampStats(supports.champions_in_role)
 
     input_dict = {"T": top_laners, "J": junglers, "M": mid_laners, "A": adcs, "S": supports}
-    list_rol = ["T", "J", "M", "A", "S"]
-    list_var= ["W", "R", "P", "B", "K", "PR"]
+    list_rol = ["T", "J", "M", "A", "S"] #Each letter refers to Top Jungle Mid ADC and Support respectively
+    list_var= ["W", "R", "P", "B", "K", "PR"] #Each letter refers to Winrate, Rolerate, Pickrate, Banrate, Presence, and KDA respectively
     dict_title = {"T": "Top Laners", "J": "Junglers", "M": "Mid Laners", "A": "ADCs", "S": "Supports"}
     role_selection = get_variable(list_rol, input("What role would you like to compare stats for?\nT for Top\nJ for Jungle\nM for Mid\nA for ADC\nS for Support\n").upper())
 
