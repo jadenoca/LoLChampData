@@ -44,9 +44,8 @@ with open('champion_stats.txt') as champion_stats_txt:
     #Pickrate is the percentage of games that the champion is picked in draft
     #Banrate is the percentage of games that the champion is banned in draft
     #Presence is Pickrate + Banrate, representing the percentage of games that the champion is either picked or banned in draft; its draft presence
-    def make_lists(thresh):
-        if type(thresh) == str:
-            thresh = 0
+    def make_lists(thresh = 0):
+      
         for i in range(0, len(raw_champion_data), 3):
             if float(raw_champion_data[i + 2].strip('\n').split()[-4][:-1]) > thresh: 
                 champs.append(raw_champion_data[i].strip('\n').split(',')[0].strip('\"'))
@@ -104,9 +103,9 @@ with open('champion_stats.txt') as champion_stats_txt:
 
     print("\nWelcome to the League of Legends Champion Stat Project!")
 
-    make_lists(input("""\nEnter lower threshold for pick rate in role to discard very rare picks in certain roles
+    make_lists(float(input("""\nEnter lower threshold for pick rate in role to discard very rare picks in certain roles
 (This will get rid of low playrate duplicates).
-Enter '0' to keep all values. An invalid value will default to 0:\n"""))
+Enter '0' to keep all values. An invalid value will default to 0:\n""")))
     
     list_of_champions = create_champs()
     top_laners = Role(compile_role(list_of_champions, "TOP"))
